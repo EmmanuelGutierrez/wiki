@@ -1,0 +1,30 @@
+---
+import { getCollection, render } from "astro:content";
+import WikiLayout from "@/layouts/WikiLayout.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("wiki");
+  return entries.map((entry) => ({
+    params: { slug: entry.id === "index" ? undefined : entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+// Get all entries for the navbar
+const allEntries = await getCollection("wiki");
+const navEntries = allEntries.map((e) => ({
+  id: e.id,
+  title: e.data.title,
+  order: e.data.order,
+  content: e.body ?? "",
+}));
+
+const currentPath = `/wiki/${entry.id}`;
+---
+
+<WikiLayout title={entry.data.title} entries={navEntries} currentPath={currentPath}>
+  <Content />
+</WikiLayout>

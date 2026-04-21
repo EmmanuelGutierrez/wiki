@@ -1,0 +1,84 @@
+---
+import "@/styles/global.css";
+import NavTree from "@/components/NavTree";
+import MobileNav from "@/components/MobileNav";
+import type { NavEntry } from "@/components/NavTree";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+  title: string;
+  entries: NavEntry[];
+  currentPath: string;
+}
+
+const { title, entries, currentPath } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={`${title} - Wiki D&D 2024`} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | Wiki D&D 2024</title>
+  </head>
+  <body class="min-h-screen bg-background text-foreground antialiased">
+    <div class="flex min-h-screen">
+      <ClientRouter />
+      <!-- Sidebar (desktop) -->
+      <aside
+        class="hidden lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0 lg:z-30 border-r border-border bg-card"
+      >
+        <div class="flex h-14 items-center border-b border-border px-4">
+          <a
+            href="/wiki"
+            class="flex items-center gap-2 font-bold text-lg tracking-tight hover:opacity-80 transition-opacity"
+          >
+            <span class="text-xl">📜</span>
+            <span
+              class="bg-linear-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent"
+            >
+              Wiki D&D
+            </span>
+          </a>
+        </div>
+        <div class="flex-1 overflow-hidden">
+          <NavTree
+            entries={entries}
+            currentPath={currentPath}
+            client:only="react"
+          />
+        </div>
+      </aside>
+
+      <!-- Main content area -->
+      <div class="flex flex-1 flex-col lg:pl-72">
+        <!-- Header (mobile) -->
+        <header
+          class="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-border bg-background/80 backdrop-blur-sm px-4 lg:px-6"
+        >
+          <MobileNav entries={entries} currentPath={currentPath} client:load />
+          <div class="flex items-center gap-2 lg:hidden">
+            <span class="text-xl">📜</span>
+            <span
+              class="font-bold text-lg bg-linear-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent"
+            >
+              Wiki D&D
+            </span>
+          </div>
+          <div class="hidden lg:block text-sm text-muted-foreground">
+            {title}
+          </div>
+        </header>
+
+        <!-- Content -->
+        <main class="flex-1 p-6 lg:p-10 max-w-4xl">
+          <article class="wiki-content">
+            <slot />
+          </article>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
