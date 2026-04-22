@@ -82,14 +82,14 @@ export default function NavSearch({ entries }: NavSearchProps) {
                   variant="ghost"
                   asChild
                   onClick={() => setSearchQuery("")}
-                  className="h-auto w-full justify-start gap-2 px-2 py-2.5 text-sm normal-case tracking-normal hover:bg-primary/10 hover:text-primary transition-all group/result"
+                  className="h-auto w-full justify-start items-start gap-2 px-2 py-2.5 text-sm normal-case tracking-normal hover:bg-primary/10 hover:text-primary transition-all group/result whitespace-normal"
                 >
-                  <a href={item.id === "index" ? "/wiki" : `/wiki/${item.id}`}>
-                    <div className="flex flex-col items-start gap-0.5 text-left w-full overflow-hidden">
-                      <span className="font-semibold truncate w-full group-hover/result:translate-x-0.5 transition-transform">
+                  <a href={item.id === "index" ? "/wiki" : `/wiki/${item.id}`} className="w-full">
+                    <div className="flex flex-col items-start gap-0.5 text-left w-full">
+                      <span className="font-semibold group-hover/result:translate-x-0.5 transition-transform">
                         {item.title}
                       </span>
-                      <span className="text-[10px] text-muted-foreground line-clamp-1 opacity-70">
+                      <span className="text-[10px] text-muted-foreground opacity-70">
                         {item.id.replace(/\//g, " > ")}
                       </span>
                     </div>

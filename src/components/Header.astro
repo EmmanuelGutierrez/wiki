@@ -6,15 +6,16 @@ interface Props {
   title: string;
   entries: NavEntry[];
   currentPath: string;
+  headings?: any[];
 }
 
-const { title, entries, currentPath } = Astro.props;
+const { title, entries, currentPath, headings } = Astro.props;
 ---
 
 <header
   class="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-border bg-background/80 backdrop-blur-sm px-4 lg:px-6"
 >
-  <MobileNav entries={entries} currentPath={currentPath} client:load />
+  <MobileNav entries={entries} currentPath={currentPath} currentHeadings={headings} client:load />
   <div class="flex items-center gap-2 lg:hidden">
     <span class="text-xl">📜</span>
     <span

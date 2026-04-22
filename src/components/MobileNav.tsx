@@ -11,9 +11,10 @@ import NavTree, { type NavEntry } from "./NavTree";
 interface MobileNavProps {
   entries: NavEntry[];
   currentPath: string;
+  currentHeadings?: any[];
 }
 
-export default function MobileNav({ entries, currentPath }: MobileNavProps) {
+export default function MobileNav({ entries, currentPath, currentHeadings }: MobileNavProps) {
   return (
     <Sheet>
       <SheetTrigger >
@@ -26,7 +27,7 @@ export default function MobileNav({ entries, currentPath }: MobileNavProps) {
         <SheetTitle className="px-4 pt-4 pb-2 text-lg font-bold tracking-tight">
           📜 Wiki D&D
         </SheetTitle>
-        <NavTree entries={entries} currentPath={currentPath} />
+        <NavTree entries={entries} currentPath={currentPath} currentHeadings={currentHeadings} />
       </SheetContent>
     </Sheet>
   );

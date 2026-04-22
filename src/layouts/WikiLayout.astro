@@ -10,9 +10,10 @@ interface Props {
   title: string;
   entries: NavEntry[];
   currentPath: string;
+  headings?: any[];
 }
 
-const { title, entries, currentPath } = Astro.props;
+const { title, entries, currentPath, headings } = Astro.props;
 ---
 
 <!doctype html>
@@ -48,6 +49,7 @@ const { title, entries, currentPath } = Astro.props;
           <NavTree
             entries={entries}
             currentPath={currentPath}
+            currentHeadings={headings}
             client:only="react"
           />
         </div>
@@ -60,6 +62,7 @@ const { title, entries, currentPath } = Astro.props;
           title={title}
           entries={entries}
           currentPath={currentPath}
+          headings={headings}
         />
 
         <!-- Content -->

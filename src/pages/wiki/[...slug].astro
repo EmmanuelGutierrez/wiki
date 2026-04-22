@@ -11,7 +11,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 
 // Get all entries for the navbar
 const allEntries = await getCollection("wiki");
@@ -25,6 +25,6 @@ const navEntries = allEntries.map((e) => ({
 const currentPath = `/wiki/${entry.id}`;
 ---
 
-<WikiLayout title={entry.data.title} entries={navEntries} currentPath={currentPath}>
+<WikiLayout title={entry.data.title} entries={navEntries} currentPath={currentPath} headings={headings}>
   <Content />
 </WikiLayout>

@@ -135,9 +135,10 @@ interface FolderNodeProps {
   node: TreeNode;
   currentPath: string;
   depth: number;
+  currentHeadings?: any[];
 }
 
-function FolderNode({ node, currentPath, depth }: FolderNodeProps) {
+function FolderNode({ node, currentPath, depth, currentHeadings }: FolderNodeProps) {
   const isActive = isPathActive(node.path, currentPath);
   const isInSubtree = isPathInSubtree(node, currentPath);
   const [open, setOpen] = useState(isInSubtree);
@@ -148,33 +149,33 @@ function FolderNode({ node, currentPath, depth }: FolderNodeProps) {
           variant="ghost"
           asChild={!!node.path}
           className={cn(
-            "h-auto w-full justify-start gap-2 px-2 py-1.5 font-medium normal-case tracking-normal",
+            "h-auto w-full justify-start items-start gap-2 px-2 py-1.5 font-medium normal-case tracking-normal whitespace-normal",
             isActive && "bg-accent text-accent-foreground",
             depth > 0 && "ml-3",
           )}
         >
           {node.path ? (
-            <a href={node.path}>
+            <a href={node.path} className="flex items-start gap-2 w-full">
               <ChevronRight
                 className={cn(
-                  "size-4 shrink-0 text-muted-foreground transition-transform duration-200",
+                  "size-4 shrink-0 mt-0.5 text-muted-foreground transition-transform duration-200",
                   open && "rotate-90",
                 )}
               />
-              <Folder className="size-4 shrink-0 text-primary" />
-              <span className="truncate">{node.title || node.displayName}</span>
+              <Folder className="size-4 shrink-0 mt-0.5 text-primary" />
+              <span>{node.title || node.displayName}</span>
             </a>
           ) : (
-            <>
+            <div className="flex items-start gap-2 w-full">
               <ChevronRight
                 className={cn(
-                  "size-4 shrink-0 text-muted-foreground transition-transform duration-200",
+                  "size-4 shrink-0 mt-0.5 text-muted-foreground transition-transform duration-200",
                   open && "rotate-90",
                 )}
               />
-              <Folder className="size-4 shrink-0 text-primary" />
-              <span className="truncate">{node.title || node.displayName}</span>
-            </>
+              <Folder className="size-4 shrink-0 mt-0.5 text-primary" />
+              <span>{node.title || node.displayName}</span>
+            </div>
           )}
         </Button>
       </CollapsibleTrigger>
@@ -186,6 +187,7 @@ function FolderNode({ node, currentPath, depth }: FolderNodeProps) {
               node={child}
               currentPath={currentPath}
               depth={depth + 1}
+              currentHeadings={currentHeadings}
             />
           ))}
         </div>
@@ -198,27 +200,49 @@ interface FileNodeProps {
   node: TreeNode;
   currentPath: string;
   depth: number;
+  currentHeadings?: any[];
 }
 
-function FileNode({ node, currentPath, depth }: FileNodeProps) {
+function FileNode({ node, currentPath, depth, currentHeadings }: FileNodeProps) {
   const isActive = isPathActive(node.path, currentPath);
+  const activeHeadings = isActive && currentHeadings ? currentHeadings.filter(h => h.depth > 1 && h.depth <= 3) : [];
+
   return (
-    <Button
-      variant="ghost"
-      asChild
-      className={cn(
-        "h-auto w-full justify-start gap-2 px-2 py-1.5 text-sm normal-case tracking-normal",
-        isActive
-          ? "bg-primary/10 text-primary font-medium hover:bg-primary/20 hover:text-primary"
-          : "text-muted-foreground",
-        depth > 0 && "ml-3",
+    <div className="flex flex-col">
+      <Button
+        variant="ghost"
+        asChild
+        className={cn(
+          "h-auto w-full justify-start items-start gap-2 px-2 py-1.5 text-sm normal-case tracking-normal whitespace-normal",
+          isActive
+            ? "bg-primary/10 text-primary font-medium hover:bg-primary/20 hover:text-primary"
+            : "text-muted-foreground",
+          depth > 0 && "ml-3",
+        )}
+      >
+        <a href={node.path || "#"} className="flex items-start gap-2 w-full">
+          <FileText className="size-4 shrink-0 ml-4 mt-0.5" />
+          <span>{node.title || node.displayName}</span>
+        </a>
+      </Button>
+
+      {activeHeadings.length > 0 && (
+        <div className="flex flex-col ml-10 mt-1 mb-2 border-l border-border/50">
+          {activeHeadings.map((heading, i) => (
+            <a
+              key={`${heading.slug}-${i}`}
+              href={`#${heading.slug}`}
+              className={cn(
+                "py-1 text-xs text-muted-foreground hover:text-foreground transition-colors whitespace-normal leading-relaxed",
+                heading.depth === 2 ? "pl-3 font-medium" : "pl-6"
+              )}
+            >
+              {heading.text}
+            </a>
+          ))}
+        </div>
       )}
-    >
-      <a href={node.path || "#"}>
-        <FileText className="size-4 shrink-0 ml-4" />
-        <span className="truncate">{node.title || node.displayName}</span>
-      </a>
-    </Button>
+    </div>
   );
 }
 
@@ -226,25 +250,28 @@ interface TreeNodeComponentProps {
   node: TreeNode;
   currentPath: string;
   depth: number;
+  currentHeadings?: any[];
 }
 
 function TreeNodeComponent({
   node,
   currentPath,
   depth,
+  currentHeadings,
 }: TreeNodeComponentProps) {
   if (node.isFolder) {
-    return <FolderNode node={node} currentPath={currentPath} depth={depth} />;
+    return <FolderNode node={node} currentPath={currentPath} depth={depth} currentHeadings={currentHeadings} />;
   }
-  return <FileNode node={node} currentPath={currentPath} depth={depth} />;
+  return <FileNode node={node} currentPath={currentPath} depth={depth} currentHeadings={currentHeadings} />;
 }
 
 interface NavTreeProps {
   entries: NavEntry[];
   currentPath: string;
+  currentHeadings?: any[];
 }
 
-export default function NavTree({ entries, currentPath }: NavTreeProps) {
+export default function NavTree({ entries, currentPath, currentHeadings }: NavTreeProps) {
   const tree = useMemo(() => buildTree(entries), [entries]);
 
   return (
@@ -252,7 +279,7 @@ export default function NavTree({ entries, currentPath }: NavTreeProps) {
       {/* Search Bar */}
       <NavSearch entries={entries} />
 
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 min-h-0 overflow-y-auto">
         <div className="p-3 pt-1 space-y-1">
           {/* Tree */}
           {tree.map((node) => (
@@ -261,6 +288,7 @@ export default function NavTree({ entries, currentPath }: NavTreeProps) {
               node={node}
               currentPath={currentPath}
               depth={0}
+              currentHeadings={currentHeadings}
             />
           ))}
         </div>

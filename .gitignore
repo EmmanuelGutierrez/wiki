@@ -24,4 +24,5 @@ pnpm-debug.log*
 .idea/
 
 # wiki content
-src/content/test/
+# src/content/test/
+src/content/wiki/
