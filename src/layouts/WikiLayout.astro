@@ -4,6 +4,7 @@ import NavTree from "@/components/NavTree";
 import MobileNav from "@/components/MobileNav";
 import type { NavEntry } from "@/components/NavTree";
 import { ClientRouter } from "astro:transitions";
+import Header from "@/components/Header.astro";
 
 interface Props {
   title: string;
@@ -55,26 +56,17 @@ const { title, entries, currentPath } = Astro.props;
       <!-- Main content area -->
       <div class="flex flex-1 flex-col lg:pl-72">
         <!-- Header (mobile) -->
-        <header
-          class="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-border bg-background/80 backdrop-blur-sm px-4 lg:px-6"
-        >
-          <MobileNav entries={entries} currentPath={currentPath} client:load />
-          <div class="flex items-center gap-2 lg:hidden">
-            <span class="text-xl">📜</span>
-            <span
-              class="font-bold text-lg bg-linear-to-r from-primary to-accent bg-clip-text text-transparent"
-            >
-              Wiki D&D
-            </span>
-          </div>
-          <div class="hidden lg:block text-sm text-muted-foreground">
-            {title}
-          </div>
-        </header>
+        <Header
+          title={title}
+          entries={entries}
+          currentPath={currentPath}
+        />
 
         <!-- Content -->
         <main class="flex-1 p-6 lg:p-10 max-w-4xl">
-          <article class="prose prose-base prose-primary dark:prose-invert max-w-none">
+          <article
+            class="prose prose-base prose-primary dark:prose-invert max-w-none"
+          >
             <slot />
           </article>
         </main>
