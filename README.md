@@ -56,6 +56,9 @@ order: 1                      # Orden de aparición en el menú (ascendente)
 Contenido aquí...
 ```
 
+> [!IMPORTANT]
+> **Archivo de Inicio del Proyecto**: La carpeta principal definida en `WIKI_CONTENT_DIR` **debe** contener un archivo `index.mdx` (o `.md`) con su respectivo `title` y `order: 0`. Este archivo sirve como la página de inicio de tu wiki.
+
 ### Organización de Carpetas e Índices
 
 - **Folders**: Puedes crear subcarpetas para organizar el contenido (ej. `monstruos/`, `hechizos/`).
