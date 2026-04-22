@@ -163,7 +163,7 @@ function FolderNode({ node, currentPath, depth }: FolderNodeProps) {
                   open && "rotate-90",
                 )}
               />
-              <Folder className="size-4 shrink-0 text-amber-500" />
+              <Folder className="size-4 shrink-0 text-primary" />
               <span className="truncate">{node.title || node.displayName}</span>
             </a>
           ) : (
@@ -174,7 +174,7 @@ function FolderNode({ node, currentPath, depth }: FolderNodeProps) {
                   open && "rotate-90",
                 )}
               />
-              <Folder className="size-4 shrink-0 text-amber-500" />
+              <Folder className="size-4 shrink-0 text-primary" />
               <span className="truncate">{node.title || node.displayName}</span>
             </>
           )}

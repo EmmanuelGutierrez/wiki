@@ -2,6 +2,7 @@
 trigger: always_on
 ---
 
+0-Utiliza pnpm en vez de npm
 1-utilizar componentes de la libreria https://ui.shadcn.com
 2-explicar que componente se esta por utilizar
 3-buscar si el componente esta instalado en el proyecto

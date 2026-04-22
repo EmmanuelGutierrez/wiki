@@ -37,7 +37,7 @@ const { title, entries, currentPath } = Astro.props;
           >
             <span class="text-xl">📜</span>
             <span
-              class="bg-linear-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent"
+              class="bg-linear-to-r from-primary to-accent bg-clip-text text-transparent"
             >
               Wiki D&D
             </span>
@@ -62,7 +62,7 @@ const { title, entries, currentPath } = Astro.props;
           <div class="flex items-center gap-2 lg:hidden">
             <span class="text-xl">📜</span>
             <span
-              class="font-bold text-lg bg-linear-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent"
+              class="font-bold text-lg bg-linear-to-r from-primary to-accent bg-clip-text text-transparent"
             >
               Wiki D&D
             </span>
@@ -74,7 +74,7 @@ const { title, entries, currentPath } = Astro.props;
 
         <!-- Content -->
         <main class="flex-1 p-6 lg:p-10 max-w-4xl">
-          <article class="wiki-content">
+          <article class="prose prose-base prose-primary dark:prose-invert max-w-none">
             <slot />
           </article>
         </main>
