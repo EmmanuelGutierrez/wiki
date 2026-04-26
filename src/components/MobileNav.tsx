@@ -12,9 +12,10 @@ interface MobileNavProps {
   entries: NavEntry[];
   currentPath: string;
   currentHeadings?: any[];
+  wikiName: string;
 }
 
-export default function MobileNav({ entries, currentPath, currentHeadings }: MobileNavProps) {
+export default function MobileNav({ entries, currentPath, currentHeadings, wikiName }: MobileNavProps) {
   return (
     <Sheet>
       <SheetTrigger >
@@ -25,7 +26,7 @@ export default function MobileNav({ entries, currentPath, currentHeadings }: Mob
       </SheetTrigger>
       <SheetContent side="left" className="w-72 p-0">
         <SheetTitle className="px-4 pt-4 pb-2 text-lg font-bold tracking-tight">
-          📜 Wiki D&D
+          📜 {wikiName}
         </SheetTitle>
         <NavTree entries={entries} currentPath={currentPath} currentHeadings={currentHeadings} />
       </SheetContent>

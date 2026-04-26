@@ -7,21 +7,22 @@ interface Props {
   entries: NavEntry[];
   currentPath: string;
   headings?: any[];
+  wikiName: string;
 }
 
-const { title, entries, currentPath, headings } = Astro.props;
+const { title, entries, currentPath, headings, wikiName } = Astro.props;
 ---
 
 <header
   class="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-border bg-background/80 backdrop-blur-sm px-4 lg:px-6"
 >
-  <MobileNav entries={entries} currentPath={currentPath} currentHeadings={headings} client:load />
+  <MobileNav entries={entries} currentPath={currentPath} currentHeadings={headings} wikiName={wikiName} client:load />
   <div class="flex items-center gap-2 lg:hidden">
     <span class="text-xl">📜</span>
     <span
       class="font-bold text-lg bg-linear-to-r from-primary to-accent bg-clip-text text-transparent"
     >
-      Wiki D&D
+      {wikiName}
     </span>
   </div>
   <div class="hidden lg:block text-sm text-muted-foreground">

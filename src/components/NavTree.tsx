@@ -144,41 +144,53 @@ function FolderNode({ node, currentPath, depth, currentHeadings }: FolderNodePro
   const [open, setOpen] = useState(isInSubtree);
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger asChild>
-        <Button
-          variant="ghost"
-          asChild={!!node.path}
-          className={cn(
-            "h-auto w-full justify-start items-start gap-2 px-2 py-1.5 font-medium normal-case tracking-normal whitespace-normal",
-            isActive && "bg-accent text-accent-foreground",
-            depth > 0 && "ml-3",
-          )}
-        >
-          {node.path ? (
-            <a href={node.path} className="flex items-start gap-2 w-full">
-              <ChevronRight
-                className={cn(
-                  "size-4 shrink-0 mt-0.5 text-muted-foreground transition-transform duration-200",
-                  open && "rotate-90",
-                )}
-              />
-              <Folder className="size-4 shrink-0 mt-0.5 text-primary" />
-              <span>{node.title || node.displayName}</span>
-            </a>
-          ) : (
-            <div className="flex items-start gap-2 w-full">
-              <ChevronRight
-                className={cn(
-                  "size-4 shrink-0 mt-0.5 text-muted-foreground transition-transform duration-200",
-                  open && "rotate-90",
-                )}
-              />
-              <Folder className="size-4 shrink-0 mt-0.5 text-primary" />
-              <span>{node.title || node.displayName}</span>
-            </div>
-          )}
-        </Button>
-      </CollapsibleTrigger>
+      <Button
+        variant="ghost"
+        asChild={!!node.path}
+        className={cn(
+          "h-auto w-full justify-start items-start gap-2 px-2 py-1.5 font-medium normal-case tracking-normal whitespace-normal",
+          isActive && "bg-accent text-accent-foreground",
+          depth > 0 && "ml-3",
+        )}
+      >
+        {node.path ? (
+          <a
+            href={node.path}
+            className="flex items-start gap-2 w-full"
+            onClick={(e) => {
+              if (isActive) {
+                e.preventDefault();
+                setOpen(!open);
+              } else {
+                setOpen(true);
+              }
+            }}
+          >
+            <ChevronRight
+              className={cn(
+                "size-4 shrink-0 mt-0.5 text-muted-foreground transition-transform duration-200",
+                open && "rotate-90",
+              )}
+            />
+            <Folder className="size-4 shrink-0 mt-0.5 text-primary" />
+            <span>{node.title || node.displayName}</span>
+          </a>
+        ) : (
+          <div
+            className="flex items-start gap-2 w-full cursor-pointer"
+            onClick={() => setOpen(!open)}
+          >
+            <ChevronRight
+              className={cn(
+                "size-4 shrink-0 mt-0.5 text-muted-foreground transition-transform duration-200",
+                open && "rotate-90",
+              )}
+            />
+            <Folder className="size-4 shrink-0 mt-0.5 text-primary" />
+            <span>{node.title || node.displayName}</span>
+          </div>
+        )}
+      </Button>
       <CollapsibleContent>
         <div className="ml-2 border-l border-border pl-1">
           {node.children.map((child) => (
@@ -206,43 +218,68 @@ interface FileNodeProps {
 function FileNode({ node, currentPath, depth, currentHeadings }: FileNodeProps) {
   const isActive = isPathActive(node.path, currentPath);
   const activeHeadings = isActive && currentHeadings ? currentHeadings.filter(h => h.depth > 1 && h.depth <= 3) : [];
+  const [open, setOpen] = useState(isActive);
 
   return (
-    <div className="flex flex-col">
+    <Collapsible open={open} onOpenChange={setOpen} className="flex flex-col">
       <Button
         variant="ghost"
         asChild
         className={cn(
-          "h-auto w-full justify-start items-start gap-2 px-2 py-1.5 text-sm normal-case tracking-normal whitespace-normal",
+          "h-auto w-full justify-start items-start gap-2 px-2 py-1.5 text-sm normal-case tracking-normal whitespace-normal transition-colors",
           isActive
             ? "bg-primary/10 text-primary font-medium hover:bg-primary/20 hover:text-primary"
             : "text-muted-foreground",
           depth > 0 && "ml-3",
         )}
       >
-        <a href={node.path || "#"} className="flex items-start gap-2 w-full">
-          <FileText className="size-4 shrink-0 ml-4 mt-0.5" />
+        <a
+          href={node.path || "#"}
+          className="flex items-start gap-2 w-full"
+          onClick={(e) => {
+            if (activeHeadings.length > 0) {
+              if (isActive) {
+                // If active, just toggle
+                e.preventDefault();
+                setOpen(!open);
+              } else {
+                // If not active, navigation will happen, ensure it's open
+                setOpen(true);
+              }
+            }
+          }}
+        >
+          <ChevronRight
+            className={cn(
+              "size-3.5 shrink-0 mt-0.5 transition-transform duration-200",
+              open && "rotate-90",
+              !activeHeadings.length && "invisible"
+            )}
+          />
+          <FileText className="size-4 shrink-0 mt-0.5" />
           <span>{node.title || node.displayName}</span>
         </a>
       </Button>
 
-      {activeHeadings.length > 0 && (
-        <div className="flex flex-col ml-10 mt-1 mb-2 border-l border-border/50">
-          {activeHeadings.map((heading, i) => (
-            <a
-              key={`${heading.slug}-${i}`}
-              href={`#${heading.slug}`}
-              className={cn(
-                "py-1 text-xs text-muted-foreground hover:text-foreground transition-colors whitespace-normal leading-relaxed",
-                heading.depth === 2 ? "pl-3 font-medium" : "pl-6"
-              )}
-            >
-              {heading.text}
-            </a>
-          ))}
-        </div>
-      )}
-    </div>
+      <CollapsibleContent>
+        {activeHeadings.length > 0 && (
+          <div className="flex flex-col ml-10 mt-1 mb-2 border-l border-border/50">
+            {activeHeadings.map((heading, i) => (
+              <a
+                key={`${heading.slug}-${i}`}
+                href={`#${heading.slug}`}
+                className={cn(
+                  "py-1 text-xs text-muted-foreground hover:text-foreground transition-colors whitespace-normal leading-relaxed",
+                  heading.depth === 2 ? "pl-3 font-medium" : "pl-6"
+                )}
+              >
+                {heading.text}
+              </a>
+            ))}
+          </div>
+        )}
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
 

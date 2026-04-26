@@ -1,6 +1,6 @@
-# 🌌 Astro Wiki | D&D 2024
+# 🌌 Astro Wiki
 
-Una implementación moderna y performante de una Wiki personal, diseñada específicamente para gestionar contenido estructurado como campañas de D&D, documentación técnica o notas personales. Construida con **Astro 6** y **Tailwind CSS 4**.
+Una implementación moderna y performante de una Wiki personal, diseñada para gestionar contenido estructurado como documentación técnica, campañas de juegos o notas personales. Construida con **Astro 6** y **Tailwind CSS 4**.
 
 ---
 
@@ -27,9 +27,10 @@ Una implementación moderna y performante de una Wiki personal, diseñada espec�
 3. **Configurar variables de entorno:**
    Crea un archivo `.env` en la raíz del proyecto:
    ```env
+   WIKI_NAME="Mi Wiki"
    WIKI_CONTENT_DIR=wiki
    ```
-   *Nota: `WIKI_CONTENT_DIR` define qué carpeta dentro de `src/content/` se usará como fuente principal de la wiki.*
+   *Nota: `WIKI_NAME` define el nombre que aparecerá en el Header y el título del sitio (por defecto: "Wiki"). `WIKI_CONTENT_DIR` define qué carpeta dentro de `src/content/` se usará como fuente principal.*
 
 4. **Iniciar servidor de desarrollo:**
    ```bash

@@ -14,6 +14,8 @@ interface Props {
 }
 
 const { title, entries, currentPath, headings } = Astro.props;
+
+const wikiName = import.meta.env.WIKI_NAME || "Wiki";
 ---
 
 <!doctype html>
@@ -21,9 +23,9 @@ const { title, entries, currentPath, headings } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={`${title} - Wiki D&D 2024`} />
+    <meta name="description" content={`${title} - ${wikiName}`} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | Wiki D&D 2024</title>
+    <title>{title} | {wikiName}</title>
   </head>
   <body class="min-h-screen bg-background text-foreground antialiased">
     <div class="flex min-h-screen">
@@ -41,7 +43,7 @@ const { title, entries, currentPath, headings } = Astro.props;
             <span
               class="bg-linear-to-r from-primary to-accent bg-clip-text text-transparent"
             >
-              Wiki D&D
+              {wikiName}
             </span>
           </a>
         </div>
@@ -63,10 +65,11 @@ const { title, entries, currentPath, headings } = Astro.props;
           entries={entries}
           currentPath={currentPath}
           headings={headings}
+          wikiName={wikiName}
         />
 
         <!-- Content -->
-        <main class="flex-1 p-6 lg:p-10 max-w-4xl">
+        <main class="flex-1 p-6 lg:p-10 max-w-4xl mx-auto w-full">
           <article
             class="prose prose-base prose-primary dark:prose-invert max-w-none"
           >
